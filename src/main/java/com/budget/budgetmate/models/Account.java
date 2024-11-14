@@ -11,7 +11,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public abstract class Account {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -40,23 +40,18 @@ public abstract class Account {
     public void deposit(double amount) {
         state.deposit(this, amount);
     }
-
     public void withdraw(double amount) {
         state.withdraw(this, amount);
     }
-
     public void resetBalance() {
         state.resetBalance(this);
     }
-
     public void activateAccount() {
         this.setState(new ActiveState());
     }
-
     public void freezeAccount() {
         this.setState(new FrozenState());
     }
-
     public void closeAccount() {
         this.setState(new ClosedState());
     }
