@@ -5,7 +5,7 @@ import com.budget.budgetmate.state.LoanActiveState;
 import jakarta.persistence.*;
 
 @Entity
-public class Loan extends Account {
+public class Loan extends Account implements Cloneable{
     @Column(nullable = false)
     private double interestRate;
 
@@ -26,6 +26,19 @@ public class Loan extends Account {
     public void checkAndCloseLoan() {
         if (this.getBalance() >= 0) {
             this.setState(new ClosedState());
+        }
+    }
+
+    @Override
+    public Loan clone() {
+        try {
+            Loan clonedLoan = (Loan) super.clone();
+            clonedLoan.setState(new LoanActiveState());
+            clonedLoan.setId(null);
+            return clonedLoan;
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }

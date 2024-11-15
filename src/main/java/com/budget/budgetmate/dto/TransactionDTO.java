@@ -12,4 +12,5 @@ public class TransactionDTO {
     private String transactionType;
     private LocalDate date;
     private boolean isPeriodic;
+    private LocalDate endDate;
 }
