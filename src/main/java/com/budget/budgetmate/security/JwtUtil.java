@@ -2,34 +2,33 @@ package com.budget.budgetmate.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import javax.crypto.SecretKey;
 import java.util.Date;
 
 @Component
 public class JwtUtil {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private String secretKey;  // статичний ключ задається у properties або environment
 
     @Value("${jwt.expiration}")
     private Long expirationTime;
 
     public String generateToken(String username) {
-        SecretKey key = Keys.secretKeyFor(SignatureAlgorithm.HS512);  // генерує ключ розміром 512 біт
         return Jwts.builder()
                 .setSubject(username)
-                .signWith(key)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SignatureAlgorithm.HS512, secretKey.getBytes())  // використовуємо той самий статичний ключ
                 .compact();
     }
 
     public String extractUsername(String token) {
         return Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(secretKey.getBytes())  // ключ для перевірки
                 .parseClaimsJws(token)
                 .getBody()
                 .getSubject();
@@ -42,7 +41,7 @@ public class JwtUtil {
 
     private boolean isTokenExpired(String token) {
         final Date expiration = Jwts.parser()
-                .setSigningKey(secretKey)
+                .setSigningKey(secretKey.getBytes())
                 .parseClaimsJws(token)
                 .getBody()
                 .getExpiration();

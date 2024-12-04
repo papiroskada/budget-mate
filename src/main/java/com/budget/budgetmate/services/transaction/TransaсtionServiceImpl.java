@@ -2,8 +2,10 @@ package com.budget.budgetmate.services.transaction;
 
 import com.budget.budgetmate.dto.TransactionDTO;
 import com.budget.budgetmate.models.Transaction;
+import com.budget.budgetmate.repositories.AccountRepository;
 import com.budget.budgetmate.repositories.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,6 +15,14 @@ public class TransaсtionServiceImpl implements TransactionService {
 
     public Transaction postTransaction(TransactionDTO transactionDTO) {
         return saveOrUpdateTransaction(new Transaction(), transactionDTO);
+    }
+    @Autowired
+    private AccountRepository accountRepository;
+
+    public void validateAccountExistence(Long accountId) {
+        if (!accountRepository.existsById(accountId)) {
+            throw new RuntimeException("Account does not exist");
+        }
     }
 
     private Transaction saveOrUpdateTransaction(Transaction transaction, TransactionDTO transactionDTO) {

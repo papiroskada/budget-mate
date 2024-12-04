@@ -1,7 +1,9 @@
 package com.budget.budgetmate.state;
 
 import com.budget.budgetmate.models.Account;
+import lombok.Data;
 
+@Data
 public class ActiveState implements AccountState {
     @Override
     public void updateBalance(Account account, double amount) {
