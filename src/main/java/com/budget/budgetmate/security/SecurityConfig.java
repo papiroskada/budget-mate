@@ -49,7 +49,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())  // Disable CSRF
                 .authorizeRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()  // Public paths
+<<<<<<< Updated upstream
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()  // Allow access to Swagger paths
+=======
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/error*").permitAll()
+>>>>>>> Stashed changes
                         .anyRequest().authenticated()  // All other requests require authentication
                 )
                 .sessionManagement(session -> session

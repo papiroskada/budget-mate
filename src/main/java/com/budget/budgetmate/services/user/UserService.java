@@ -52,4 +52,13 @@ public class UserService implements UserDetailsService {
                 user.getUsername(), user.getPassword(), Collections.emptyList() // Порожній список авторизацій
         );
     }
+
+     public User findById(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        System.out.println("Password from database: " + user.getPassword());
+        return user;
+    }
+
+
 }

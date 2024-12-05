@@ -10,6 +10,7 @@ import lombok.Setter;
 
 @Entity
 @Getter
+@Inheritance(strategy = InheritanceType.JOINED)
 @Setter
 public abstract class Account {
     @Id
